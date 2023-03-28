@@ -7,7 +7,7 @@ import Colors from "./contants/colors";
 
 const getScreen = (userNumber, onConfirmNumber) => {
   if (userNumber) {
-    return <GameScreen />;
+    return <GameScreen userNumber={userNumber} />;
   }
   return <StartGameScreen onConfirmNumber={onConfirmNumber} />;
 };
