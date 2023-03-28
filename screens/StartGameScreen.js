@@ -7,7 +7,7 @@ const isStringInvalid = (enteredNumber) => {
   return isNaN(choseNumber) || choseNumber <= 0 || choseNumber > 99;
 };
 
-function StartGameScreen() {
+function StartGameScreen({ onConfirmNumber }) {
   const [enteredNumber, setEnteredNumber] = useState("");
 
   function numberInputHandler(inputText) {
@@ -28,7 +28,7 @@ function StartGameScreen() {
       return;
     }
 
-    console.log("Valid number!");
+    onConfirmNumber(parseInt(enteredNumber, 10));
   }
 
   return (
