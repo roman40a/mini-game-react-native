@@ -4,16 +4,21 @@ import StartGameScreen from "./screens/StartGameScreen";
 import GameScreen from "./screens/GameScreen";
 import { useState } from "react";
 import Colors from "./contants/colors";
+import GameOverScreen from "./screens/GameOverScreen";
 
-const getScreen = (userNumber, onConfirmNumber) => {
+const getScreen = (userNumber, onConfirmNumber, gameIsOver, goToGameOver) => {
+  if (gameIsOver) {
+    return <GameOverScreen />;
+  }
   if (userNumber) {
-    return <GameScreen userNumber={userNumber} />;
+    return <GameScreen userNumber={userNumber} goToGameOver={goToGameOver} />;
   }
   return <StartGameScreen onConfirmNumber={onConfirmNumber} />;
 };
 
 export default function App() {
   const [userNumber, setUserNumber] = useState();
+  const [gameIsOver, setGameIsOver] = useState(false);
 
   function pickedNumberHandler(pickedNumber) {
     setUserNumber(pickedNumber);
@@ -31,7 +36,9 @@ export default function App() {
         imageStyle={styles.backgroundImage}
       >
         <SafeAreaView style={styles.rootScreen}>
-          {getScreen(userNumber, pickedNumberHandler)}
+          {getScreen(userNumber, pickedNumberHandler, gameIsOver, () =>
+            setGameIsOver(true)
+          )}
         </SafeAreaView>
       </ImageBackground>
     </LinearGradient>
