@@ -8,12 +8,32 @@ import AppLoading from "expo-app-loading";
 import Colors from "./contants/colors";
 import GameOverScreen from "./screens/GameOverScreen";
 
-const getScreen = (userNumber, onConfirmNumber, gameIsOver, goToGameOver) => {
+const getScreen = (
+  userNumber,
+  onConfirmNumber,
+  gameIsOver,
+  goToGameOver,
+  roundsNumber,
+  onStartNewGame,
+  handleAddRound
+) => {
   if (gameIsOver) {
-    return <GameOverScreen />;
+    return (
+      <GameOverScreen
+        userNumber={userNumber}
+        roundsNumber={roundsNumber}
+        onStartNewGame={onStartNewGame}
+      />
+    );
   }
   if (userNumber) {
-    return <GameScreen userNumber={userNumber} goToGameOver={goToGameOver} />;
+    return (
+      <GameScreen
+        userNumber={userNumber}
+        goToGameOver={goToGameOver}
+        onAddRound={handleAddRound}
+      />
+    );
   }
   return <StartGameScreen onConfirmNumber={onConfirmNumber} />;
 };
@@ -21,6 +41,7 @@ const getScreen = (userNumber, onConfirmNumber, gameIsOver, goToGameOver) => {
 export default function App() {
   const [userNumber, setUserNumber] = useState();
   const [gameIsOver, setGameIsOver] = useState(false);
+  const [roundsNumber, setRoundsNumber] = useState(1);
 
   const [fontsLoaded] = useFonts({
     "open-sans": require("./assets/fonts/OpenSans-Regular.ttf"),
@@ -35,6 +56,15 @@ export default function App() {
     setUserNumber(pickedNumber);
   }
 
+  function handleStartNewGame() {
+    setUserNumber(0);
+    setGameIsOver(false);
+  }
+
+  function handleAddRound() {
+    setRoundsNumber((prevRound) => prevRound + 1);
+  }
+
   return (
     <LinearGradient
       colors={[Colors.primary700, Colors.accent500]}
@@ -47,8 +77,14 @@ export default function App() {
         imageStyle={styles.backgroundImage}
       >
         <SafeAreaView style={styles.rootScreen}>
-          {getScreen(userNumber, pickedNumberHandler, gameIsOver, () =>
-            setGameIsOver(true)
+          {getScreen(
+            userNumber,
+            pickedNumberHandler,
+            gameIsOver,
+            () => setGameIsOver(true),
+            roundsNumber,
+            handleStartNewGame,
+            handleAddRound
           )}
         </SafeAreaView>
       </ImageBackground>
